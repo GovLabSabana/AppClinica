@@ -100,6 +100,8 @@ async def generar(request: Request,
     os.remove(filepath)
 
     return templates.TemplateResponse("index.html", {"request": request, "img_url": "/static/grafica.png"})
-teResponse("index.html", {"request": request, "img_url": "/static/grafica.png"})
+templates.TemplateResponse("index.html", {"request": request, "img_url": "/static/grafica.png"})
+
+
 
 
