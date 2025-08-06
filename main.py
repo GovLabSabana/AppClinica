@@ -5,17 +5,29 @@ from fastapi.templating import Jinja2Templates
 import matplotlib.pyplot as plt
 import pandas as pd
 import os
-from modelo_pacientes import preparar_datos, entrenar_arima, entrenar_prophet, calcular_rmse, calcular_mae, graficar_predicciones
 
+from modelo_pacientes import (
+    preparar_datos,
+    entrenar_arima,
+    entrenar_prophet,
+    calcular_rmse,
+    calcular_mae,
+    graficar_predicciones
+)
+
+# Asegurar carpeta de imágenes estáticas
 os.makedirs("static", exist_ok=True)
 
+# Configurar FastAPI y Jinja2
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
+
 @app.get("/")
 def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
+
 
 @app.post("/generar")
 async def generar(request: Request,
@@ -27,20 +39,20 @@ async def generar(request: Request,
                   weekly: str = Form(...),
                   usar_feriados: str = Form(...)):
 
-    # Guardar archivo subido
+    # Guardar archivo temporal
     contenido = await archivo.read()
     filepath = f"temp_{archivo.filename}"
     with open(filepath, "wb") as f:
         f.write(contenido)
 
-    # Convertir parámetros
+    # Convertir parámetros del formulario
     order = eval(order)
     seasonal_order = eval(seasonal_order)
     yearly = yearly == "True"
     weekly = weekly == "True"
     usar_feriados = usar_feriados == "True"
 
-    # Variables fijas
+    # Parámetros fijos
     columna = 'Seguro médico'
     fecha_corte = '2024-12-01'
     semanas_prediccion = 48
@@ -50,7 +62,7 @@ async def generar(request: Request,
     fecha_corte_dt = pd.to_datetime(fecha_corte)
     y_test = df_pivot[columna][df_pivot.index > fecha_corte_dt].iloc[:semanas_prediccion]
 
-    # Entrenar SARIMAX
+    # SARIMAX
     pred_arima, ic_arima_inf, ic_arima_sup, modelo_arima, params_arima = entrenar_arima(
         df_pivot, columna, fecha_corte, semanas_prediccion,
         order=order, seasonal_order=seasonal_order
@@ -60,7 +72,7 @@ async def generar(request: Request,
     error_arima_rmse = calcular_rmse(y_test_arima, pred_arima_alineado)
     error_arima_mae = calcular_mae(y_test_arima, pred_arima_alineado)
 
-    # Entrenar Prophet
+    # Prophet
     pred_prophet, ic_prophet_inf, ic_prophet_sup, modelo_prophet, params_prophet = entrenar_prophet(
         df_pivot, columna, fecha_corte, semanas_prediccion,
         crecimiento=growth, yearly=yearly, weekly=weekly, usar_feriados=usar_feriados
@@ -90,18 +102,13 @@ async def generar(request: Request,
         }
     }
 
-    # Graficar
+    # Graficar y guardar imagen
     plt.switch_backend('Agg')
     graficar_predicciones(df_pivot[columna], fecha_corte, modelos)
     plt.savefig("static/grafica.png")
     plt.close()
 
-    # Borrar archivo temporal
+    # Eliminar archivo temporal
     os.remove(filepath)
 
     return templates.TemplateResponse("index.html", {"request": request, "img_url": "/static/grafica.png"})
-templates.TemplateResponse("index.html", {"request": request, "img_url": "/static/grafica.png"})
-
-
-
-
