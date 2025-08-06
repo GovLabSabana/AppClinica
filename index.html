@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Predicción de pacientes</title>
+</head>
+<body>
+  <h1>Generador de gráfica SARIMAX y Prophet</h1>
+
+  <form method="post" action="/generar">
+    <label>Order (SARIMAX):</label>
+    <input type="text" name="order_p" value="(1,1,1)"><br><br>
+
+    <label>Seasonal Order (SARIMAX):</label>
+    <input type="text" name="seasonal_order_p" value="(1,1,1,52)"><br><br>
+
+    <label>Crecimiento (Prophet):</label>
+    <select name="growth">
+      <option value="linear">linear</option>
+      <option value="logistic">logistic</option>
+    </select><br><br>
+
+    <label>Yearly seasonality:</label>
+    <select name="yearly">
+      <option value="True">Sí</option>
+      <option value="False">No</option>
+    </select><br><br>
+
+    <label>Weekly seasonality:</label>
+    <select name="weekly">
+      <option value="True">Sí</option>
+      <option value="False">No</option>
+    </select><br><br>
+
+    <label>Usar feriados:</label>
+    <select name="usar_feriados">
+      <option value="True">Sí</option>
+      <option value="False">No</option>
+    </select><br><br>
+
+    <input type="submit" value="Generar gráfica">
+  </form>
+
+  {% if img_url %}
+    <h2>Resultado:</h2>
+    <img src="{{ img_url }}" alt="Gráfica generada" width="800">
+  {% endif %}
+</body>
+</html>
