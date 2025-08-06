@@ -7,6 +7,8 @@ import pandas as pd
 import os
 from modelo_pacientes import preparar_datos, entrenar_arima, entrenar_prophet, calcular_rmse, calcular_mae, graficar_predicciones
 
+os.makedirs("static", exist_ok=True)
+
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
@@ -99,4 +101,5 @@ async def generar(request: Request,
 
     return templates.TemplateResponse("index.html", {"request": request, "img_url": "/static/grafica.png"})
 teResponse("index.html", {"request": request, "img_url": "/static/grafica.png"})
+
 
