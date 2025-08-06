@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+pandas
+numpy
+matplotlib
+scikit-learn
+prophet
+statsmodels
+jinja2
+python-multipart
+plotly
