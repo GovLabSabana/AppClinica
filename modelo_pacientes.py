@@ -46,7 +46,7 @@ def preparar_datos(filepath, fecha_inicio='2023-01-07', fecha_fin='2025-06-05'):
 
     return df_semanal.loc[fecha_inicio:fecha_fin]
 
-df_pivot = preparar_datos('Informacion Pacientes Prepagada.xlsx')
+#df_pivot = preparar_datos('Informacion Pacientes Prepagada.xlsx')
 
 """# **Función 2: Entrenar modelos dados unos parámetros - Modelo SARIMAX**
 
