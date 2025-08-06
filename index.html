@@ -1,48 +1,59 @@
+<!-- templates/index.html -->
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Predicción de pacientes</title>
+    <title>Modelos de Predicción</title>
 </head>
 <body>
-  <h1>Generador de gráfica SARIMAX y Prophet</h1>
+    <h1>Predicción con ARIMA y Prophet</h1>
 
-  <form method="post" action="/generar">
-    <label>Order (SARIMAX):</label>
-    <input type="text" name="order_p" value="(1,1,1)"><br><br>
+    <form action="/" method="post" enctype="multipart/form-data">
+        <label>Sube tu archivo Excel:</label><br>
+        <input type="file" name="file" required><br><br>
 
-    <label>Seasonal Order (SARIMAX):</label>
-    <input type="text" name="seasonal_order_p" value="(1,1,1,52)"><br><br>
+        <h3>Parámetros ARIMA</h3>
+        <label>Order (p,d,q):</label>
+        <input type="text" name="order" placeholder="1,1,1" required><br>
+        <label>Seasonal Order (P,D,Q,s):</label>
+        <input type="text" name="seasonal_order" placeholder="1,1,1,52" required><br><br>
 
-    <label>Crecimiento (Prophet):</label>
-    <select name="growth">
-      <option value="linear">linear</option>
-      <option value="logistic">logistic</option>
-    </select><br><br>
+        <h3>Parámetros Prophet</h3>
+        <label>Crecimiento:</label>
+        <select name="growth">
+            <option value="linear">linear</option>
+            <option value="logistic">logistic</option>
+        </select><br>
+        <label>Estacionalidad Anual:</label>
+        <select name="yearly">
+            <option value="true">True</option>
+            <option value="false">False</option>
+        </select><br>
+        <label>Estacionalidad Semanal:</label>
+        <select name="weekly">
+            <option value="true">True</option>
+            <option value="false">False</option>
+        </select><br>
+        <label>Usar Feriados:</label>
+        <select name="usar_feriados">
+            <option value="true">True</option>
+            <option value="false">False</option>
+        </select><br><br>
 
-    <label>Yearly seasonality:</label>
-    <select name="yearly">
-      <option value="True">Sí</option>
-      <option value="False">No</option>
-    </select><br><br>
+        <label>Columna de interés (ej: 'Seguro médico'):</label>
+        <input type="text" name="columna" required><br>
+        <label>Fecha de corte (YYYY-MM-DD):</label>
+        <input type="text" name="fecha_corte" required><br>
+        <label>Semanas de predicción:</label>
+        <input type="number" name="semanas_prediccion" value="48" required><br><br>
 
-    <label>Weekly seasonality:</label>
-    <select name="weekly">
-      <option value="True">Sí</option>
-      <option value="False">No</option>
-    </select><br><br>
+        <input type="submit" value="Generar Predicción y Gráfica">
+    </form>
 
-    <label>Usar feriados:</label>
-    <select name="usar_feriados">
-      <option value="True">Sí</option>
-      <option value="False">No</option>
-    </select><br><br>
-
-    <input type="submit" value="Generar gráfica">
-  </form>
-
-  {% if img_url %}
-    <h2>Resultado:</h2>
-    <img src="{{ img_url }}" alt="Gráfica generada" width="800">
-  {% endif %}
+    {% if img_url %}
+        <h2>Resultado</h2>
+        <img src="{{ img_url }}" alt="Gráfica de predicción">
+    {% endif %}
 </body>
 </html>
+
+
