@@ -4,8 +4,7 @@ pandas
 numpy
 matplotlib
 scikit-learn
-statsmodels
 prophet
-openpyxl
-python-multipart
+statsmodels
 jinja2
+python-multipart
