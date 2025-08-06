@@ -6,4 +6,5 @@ openpyxl
 matplotlib
 scikit-learn
 prophet
+statsmodels
 python-multipart
