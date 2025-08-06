@@ -1,11 +1,9 @@
-pip install python-multipart
 fastapi
 uvicorn
-jinja2
 pandas
 numpy
+openpyxl
 matplotlib
 scikit-learn
-statsmodels
 prophet
-
+python-multipart
